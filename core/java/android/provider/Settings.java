@@ -2936,6 +2936,13 @@ public final class Settings {
          */
         public static final String FORWARD_LOOKUP_PROVIDER = "forward_lookup_provider";
 
+	/**
+         * Animate-flip Quick Settings Panel Tiles on click
+         *
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TILES_FLIP = "quick_settings_tiles_flip";
+
         /**
          * The reverse lookup provider
          *
