@@ -31,6 +31,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_KEY;
 import static com.android.internal.util.slim.QSConstants.TILE_DELIMITER;
 import static com.android.internal.util.slim.QSConstants.TILE_EXPANDEDDESKTOP;
 import static com.android.internal.util.slim.QSConstants.TILE_IMESWITCHER;
+import static com.android.internal.util.slim.QSConstants.TILE_INTERNALMEMORY;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCATION;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCKSCREEN;
 import static com.android.internal.util.slim.QSConstants.TILE_LTE;
@@ -83,6 +84,7 @@ import com.android.systemui.quicksettings.CustomTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.LocationTile;
 import com.android.systemui.quicksettings.InputMethodTile;
+import com.android.systemui.quicksettings.InternalMemory;
 import com.android.systemui.quicksettings.LteTile;
 import com.android.systemui.quicksettings.MobileNetworkTile;
 import com.android.systemui.quicksettings.MobileNetworkTypeTile;
@@ -245,6 +247,8 @@ public class QuickSettingsController {
                 qs = new ExpandedDesktopTile(mContext, this);
             } else if (tile.equals(TILE_MUSIC)) {
                 qs = new MusicTile(mContext, this);
+            } else if (tile.equals(TILE_INTERNALMEMORY)) {
+                qs = new InternalMemory(mContext, this);
             } else if (tile.equals(TILE_REBOOT)) {
                 qs = new RebootTile(mContext, this);
             } else if (tile.equals(TILE_THEME)) {
