@@ -3057,6 +3057,18 @@ public final class Settings {
         public static final String OVERSCROLL_GLOW_COLOR = "overscroll_glow_color";
 
         /**
+        * OverScroll effects configuration
+        * @hide
+        */
+        public static final String OVERSCROLL_EFFECT = "overscroll_effect";
+
+        /**
+        * Sets the overscroller weight (edge bounce effect on lists)
+        * @hide
+        */
+        public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
+
+        /**
          * Display percentage in text of the battery level on the status bar
          * HALO enabled, should default to 0 (no, HALO is disabled)
          * @hide
