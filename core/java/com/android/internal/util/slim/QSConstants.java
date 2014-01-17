@@ -50,6 +50,9 @@ public class QSConstants {
         public static final String TILE_CONTACT = "tileContact";
         public static final String TILE_INTERNALMEMORY = "toggleinternalmemory";
 
+        // Weather tile
+        public static final String TILE_WEATHER = "toogleweather";
+
         // dynamic tiles
         public static final String TILE_ALARM = "toggleAlarm";
         public static final String TILE_BUGREPORT = "toggleBugReport";
