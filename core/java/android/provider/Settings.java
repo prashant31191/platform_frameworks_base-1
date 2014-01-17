@@ -2964,6 +2964,12 @@ public final class Settings {
          */
         public static final String REVERSE_LOOKUP_PROVIDER = "reverse_lookup_provider";
         
+         /**
+         * OverScroll Glow Color
+         * @hide
+         */
+        public static final String OVERSCROLL_GLOW_COLOR = "overscroll_glow_color";
+
         /**
          * Display percentage in text of the battery level on the status bar
          * HALO enabled, should default to 0 (no, HALO is disabled)
