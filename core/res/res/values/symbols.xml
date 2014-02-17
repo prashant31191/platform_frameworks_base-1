@@ -1766,4 +1766,7 @@
   <java-symbol type="string" name="config_legacyUmsLunFile" />
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
 
+  <!-- DokdoDream -->
+  <java-symbol type="drawable" name="dokdo_dream" />
+
 </resources>
