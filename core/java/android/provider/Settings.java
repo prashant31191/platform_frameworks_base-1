@@ -3115,6 +3115,12 @@ public final class Settings {
          */
         public static final String PROGRESSBAR_COLOR_4 = "progressbar_color_4";
 
+       /**
+        * ToastAnimation
+        * @hide
+        */
+        public static final String TOAST_ANIMATION = "toast_animation";
+
 	/**
          * Whether to show the network status in the status bar
          * @hide
