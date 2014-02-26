@@ -3122,6 +3122,12 @@ public final class Settings {
         public static final String TOAST_ANIMATION = "toast_animation";
 
 	/**
+	 * Lockscreen Music Screen Switchable
+	 * @hide
+	 */
+	public static final String LOCKSCREEN_MUSIC_SWITCH ="lockscreen_music_switch";
+
+	/**
          * Whether to show the network status in the status bar
          * @hide
          */
