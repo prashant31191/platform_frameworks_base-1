@@ -130,6 +130,7 @@
     <string name="quick_settings_reminder_help_title">Touch</string>
     <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
     <string name="quick_settings_reminder_help_message">Touch the empty space above to set or change the reminder. Long-press to clear the current reminder.</string>
+
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Charging (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Charged</string>
@@ -222,4 +223,8 @@ wn on the screen). [CHAR LIMIT=NONE] -->
     <string name="weather_45">Thundershowers</string>
     <string name="weather_46">Snow Showers</string>
     <string name="weather_47">Isolated Thundershowers</string>
+
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">Smart pulldown is disabled</string>
+
 </resources>
