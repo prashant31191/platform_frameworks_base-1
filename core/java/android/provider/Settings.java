@@ -2751,6 +2751,12 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+        /** 
+         * Display second in the Clock
+         * @hide
+         */
+        public static final String CLOCK_USE_SECOND = "clock_use_second";
+
         /**
          * Show or hide clock
          * 0 - hide
