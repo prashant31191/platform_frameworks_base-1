@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 SlimRoms Project
+<!-- Copyright (C) 2013-2014 Dokdo Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,9 +13,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-<resources>
-    <declare-styleable name="BatteryIcon">
-        <attr name="batteryView" format="string" />
-    </declare-styleable>
+<style name="TextAppearance.StatusBar.NetworkStats"
+           parent="@*android:style/TextAppearance.StatusBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/network_stats_text_size</item>
+        <item name="android:textColor">#ffffff</item>
+    </style> 
+
 </resources>

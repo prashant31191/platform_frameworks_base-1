@@ -14,6 +14,14 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Network stats text size -->
+    <dimen name="network_stats_text_size">9dp</dimen>   
+
+    <!-- Notification Shortcuts -->
+    <dimen name="notification_shortcuts_close_handle_height">28dp</dimen>
+    <dimen name="notification_shortcuts_spacing_height">88dp</dimen>
+    <dimen name="notification_shortcuts_drawer_margin">56dp</dimen>
+
     <!-- Halo -->
     <dimen name="halo_bubble_size">75dp</dimen>
     <dimen name="halo_number_size">24dp</dimen>
