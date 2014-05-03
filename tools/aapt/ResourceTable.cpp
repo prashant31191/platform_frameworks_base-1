@@ -1317,9 +1317,9 @@ status_t compileResourceFile(Bundle* bundle,
                         curIsFormatted = false;
                         // Untranslatable strings must only exist in the default [empty] locale
                         if (locale.size() > 0) {
-                            SourcePos(in->getPrintableSource(), block.getLineNumber()).warning(
-                                    "string '%s' marked untranslatable but exists in locale '%s'\n",
-                                    String8(name).string(),
+                            fprintf(stderr, "aapt: warning: string '%s' in %s marked untranslatable but exists"
+                                    " in locale '%s'\n", String8(name).string(),
+                                    bundle->getResourceSourceDirs()[0],
                                     locale.string());
                             // hasErrors = localHasErrors = true;
                         } else {
@@ -1330,10 +1330,7 @@ status_t compileResourceFile(Bundle* bundle,
                             // having no default translation.
                         }
                     } else {
-                        outTable->addLocalization(
-                                name,
-                                locale,
-                                SourcePos(in->getPrintableSource(), block.getLineNumber()));
+                        outTable->addLocalization(name, locale);
                     }
 
                     if (formatted == false16) {
@@ -2573,9 +2570,9 @@ status_t ResourceTable::addSymbols(const sp<AaptSymbols>& outSymbols) {
 
 
 void
-ResourceTable::addLocalization(const String16& name, const String8& locale, const SourcePos& src)
+ResourceTable::addLocalization(const String16& name, const String8& locale)
 {
-    mLocalizations[name][locale] = src;
+    mLocalizations[name].insert(locale);
 }
 
 
@@ -2595,22 +2592,21 @@ ResourceTable::validateLocalizations(void)
     const String8 defaultLocale;
 
     // For all strings...
-    for (map<String16, map<String8, SourcePos> >::iterator nameIter = mLocalizations.begin();
+    for (map<String16, set<String8> >::iterator nameIter = mLocalizations.begin();
          nameIter != mLocalizations.end();
          nameIter++) {
-        const map<String8, SourcePos>& configSrcMap = nameIter->second;
+        const set<String8>& configSet = nameIter->second;   // naming convenience
 
         // Look for strings with no default localization
-        if (configSrcMap.count(defaultLocale) == 0) {
-            SourcePos().warning("string '%s' has no default translation.",
-                    String8(nameIter->first).string());
-            if (mBundle->getVerbose()) {
-                for (map<String8, SourcePos>::const_iterator locales = configSrcMap.begin();
-                    locales != configSrcMap.end();
-                    locales++) {
-                    locales->second.printf("locale %s found", locales->first.string());
-                }
+        if (configSet.count(defaultLocale) == 0) {
+            fprintf(stdout, "aapt: warning: string '%s' has no default translation in %s; found:",
+                    String8(nameIter->first).string(), mBundle->getResourceSourceDirs()[0]);
+            for (set<String8>::const_iterator locales = configSet.begin();
+                 locales != configSet.end();
+                 locales++) {
+                fprintf(stdout, " %s", (*locales).string());
             }
+            fprintf(stdout, "\n");
             // !!! TODO: throw an error here in some circumstances
         }
 
@@ -2620,8 +2616,6 @@ ResourceTable::validateLocalizations(void)
             const char* start = allConfigs;
             const char* comma;
             
-            set<String8> missingConfigs;
-            AaptLocaleValue locale;
             do {
                 String8 config;
                 comma = strchr(start, ',');
@@ -2632,38 +2626,27 @@ ResourceTable::validateLocalizations(void)
                     config.setTo(start);
                 }
 
-                if (!locale.initFromFilterString(config)) {
-                    continue;
-                }
-
                 // don't bother with the pseudolocale "zz_ZZ"
                 if (config != "zz_ZZ") {
-                    if (configSrcMap.find(config) == configSrcMap.end()) {
+                    if (configSet.find(config) == configSet.end()) {
                         // okay, no specific localization found.  it's possible that we are
                         // requiring a specific regional localization [e.g. de_DE] but there is an
                         // available string in the generic language localization [e.g. de];
                         // consider that string to have fulfilled the localization requirement.
                         String8 region(config.string(), 2);
-                        if (configSrcMap.find(region) == configSrcMap.end() &&
-                                configSrcMap.count(defaultLocale) == 0) {
-                            missingConfigs.insert(config);
+                        if (configSet.find(region) == configSet.end()) {
+                            if (configSet.count(defaultLocale) == 0) {
+                                fprintf(stdout, "aapt: warning: "
+                                        "**** string '%s' has no default or required localization "
+                                        "for '%s' in %s\n",
+                                        String8(nameIter->first).string(),
+                                        config.string(),
+                                        mBundle->getResourceSourceDirs()[0]);
+                            }
                         }
                     }
                 }
-            } while (comma != NULL);
-
-            if (!missingConfigs.empty()) {
-                String8 configStr;
-                for (set<String8>::iterator iter = missingConfigs.begin();
-                     iter != missingConfigs.end();
-                     iter++) {
-                    configStr.appendFormat(" %s", iter->string());
-                }
-                SourcePos().warning("string '%s' is missing %u required localizations:%s",
-                        String8(nameIter->first).string(),
-                        (unsigned int)missingConfigs.size(),
-                        configStr.string());
-            }
+           } while (comma != NULL);
         }
     }
 
