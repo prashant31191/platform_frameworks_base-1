@@ -261,7 +261,6 @@
             android:icon="@drawable/ic_qs_reboot_recovery"
             android:configChanges="orientation|keyboardHidden|screenSize" >
             <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
