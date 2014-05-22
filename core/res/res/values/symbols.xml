@@ -1807,5 +1807,22 @@
   <java-symbol type="color" name="holo_purple_dark" />
   <java-symbol type="color" name="holo_red_dark" />
 
+  <!-- Dokdo Dialog Animation -->
+  <java-symbol type="drawable" name="dokdo_dialog_ani" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_0" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_1" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_2" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_3" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_4" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_5" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_6" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_7" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_8" />
+  <java-symbol type="drawable" name="dokdo_dialog_ani_9" />
+  <java-symbol type="drawable" name="dokdo_dialog_icon" />
+  <java-symbol type="id" name="dokdo_dialog_animation" />
+  <java-symbol type="id" name="dokdo_dialog_title" />
+  <java-symbol type="layout" name="dokdo_dialog" />
+
 </resources>
 

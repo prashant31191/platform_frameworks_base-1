@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_0" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_1" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_2" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_3" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_4" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_5" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_6" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_7" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_8" />
+    <item android:duration="50" android:drawable="@drawable/dokdo_dialog_ani_9" />
+</animation-list>
