@@ -206,6 +206,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected ImageView mHaloButton;
     protected boolean mHaloButtonVisible = true;
 
+    protected FrameLayout mStatusBarContainer;
+
     // UI-specific methods
 
     /**
@@ -324,6 +326,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mLocale = mContext.getResources().getConfiguration().locale;
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
+
+        mStatusBarContainer = new FrameLayout(mContext);
 
         mStatusBarContainer = new FrameLayout(mContext);
 

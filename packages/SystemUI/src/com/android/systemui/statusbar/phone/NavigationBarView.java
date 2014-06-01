@@ -29,13 +29,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
@@ -356,6 +360,67 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         return mCurrentView.findViewById(R.id.camera_button);
     }
 
+    private void getIcons(Resources res) {
+        mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
+        mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
+        mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
+        mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
+        mRecentIcon = res.getDrawable(R.drawable.ic_sysbar_recent);
+        mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
+        mRecentAltIcon = res.getDrawable(R.drawable.ic_sysbar_recent_clear);
+        mRecentAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_clear_land);
+    }
+
+    public void updateResources() {
+        getIcons(mContext.getResources());
+        for (int i = 0; i < mRotatedViews.length; i++) {
+            ViewGroup container = (ViewGroup) mRotatedViews[i];
+            if (container != null) {
+                updateKeyButtonViewResources(container);
+                updateLightsOutResources(container);
+            }
+        }
+    }
+
+    private void updateKeyButtonViewResources(ViewGroup container) {
+        ViewGroup navButtons = (ViewGroup) container.findViewById(R.id.nav_buttons);
+        if (navButtons != null) {
+            final int nChildren = navButtons.getChildCount();
+            for (int i = 0; i < nChildren; i++) {
+                final View child = navButtons.getChildAt(i);
+                if (child instanceof KeyButtonView) {
+                    ((KeyButtonView) child).updateResources();
+                }
+            }
+        }
+        KeyButtonView kbv = (KeyButtonView) findViewById(R.id.search_light);
+        if (kbv != null) {
+            kbv.updateResources();
+        }
+        kbv = (KeyButtonView) findViewById(R.id.camera_button);
+        if (kbv != null) {
+            kbv.updateResources();
+        }
+    }
+
+    private void updateLightsOutResources(ViewGroup container) {
+        ViewGroup lightsOut = (ViewGroup) container.findViewById(R.id.lights_out);
+        if (lightsOut != null) {
+            final int nChildren = lightsOut.getChildCount();
+            for (int i = 0; i < nChildren; i++) {
+                final View child = lightsOut.getChildAt(i);
+                if (child instanceof ImageView) {
+                    final ImageView iv = (ImageView) child;
+                    // clear out the existing drawable, this is required since the
+                    // ImageView keeps track of the resource ID and if it is the same
+                    // it will not update the drawable.
+                    iv.setImageDrawable(null);
+                    iv.setImageResource(R.drawable.ic_sysbar_lights_out_dot_large);
+                }
+            }
+        }
+    }
+    
     @Override
     public void setLayoutDirection(int layoutDirection) {
         updateSettings();
@@ -1127,4 +1192,17 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         pw.println();
     }
 
+    private static Bundle getApplicationMetadata(Context context, String pkg) {
+        if (pkg != null) {
+            try {
+                ApplicationInfo ai = context.getPackageManager().
+                    getApplicationInfo(pkg, PackageManager.GET_META_DATA);
+                return ai.metaData;
+            } catch (NameNotFoundException e) {
+                return null;
+            }
+        }
+
+        return null;
+    }
 }
