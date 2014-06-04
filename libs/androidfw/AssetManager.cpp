@@ -195,7 +195,7 @@ AssetManager::~AssetManager(void)
     delete[] mVendor;
 }
 
-bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
+bool AssetManager::addAssetPath(const String8& path, void** cookie)
 {
     AutoMutex _l(mLock);
 
@@ -222,7 +222,7 @@ bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
     for (size_t i=0; i<mAssetPaths.size(); i++) {
         if (mAssetPaths[i].path == ap.path) {
             if (cookie) {
-                *cookie = static_cast<int32_t>(i+1);
+                *cookie = (void*)(i+1);
             }
             return true;
         }
@@ -235,7 +235,7 @@ bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
 
     // new paths are always added at the end
     if (cookie) {
-        *cookie = static_cast<int32_t>(mAssetPaths.size());
+        *cookie = (void*)mAssetPaths.size();
     }
 
 #ifdef HAVE_ANDROID_OS
@@ -546,17 +546,17 @@ bool AssetManager::addDefaultAssets()
     return addAssetPath(path, NULL);
 }
 
-int32_t AssetManager::nextAssetPath(const int32_t cookie) const
+void* AssetManager::nextAssetPath(void* cookie) const
 {
     AutoMutex _l(mLock);
-    const size_t next = static_cast<size_t>(cookie) + 1;
-    return next > mAssetPaths.size() ? -1 : next;
+    size_t next = ((size_t)cookie)+1;
+    return next > mAssetPaths.size() ? NULL : (void*)next;
 }
 
-String8 AssetManager::getAssetPath(const int32_t cookie) const
+String8 AssetManager::getAssetPath(void* cookie) const
 {
     AutoMutex _l(mLock);
-    const size_t which = static_cast<size_t>(cookie) - 1;
+    const size_t which = ((size_t)cookie)-1;
     if (which < mAssetPaths.size()) {
         return mAssetPaths[which].path;
     }
@@ -734,13 +734,14 @@ Asset* AssetManager::openNonAsset(const char* fileName, AccessMode mode)
     return NULL;
 }
 
-Asset* AssetManager::openNonAsset(const int32_t cookie, const char* fileName, AccessMode mode)
+Asset* AssetManager::openNonAsset(void* cookie, const char* fileName, AccessMode mode)
 {
-    const size_t which = static_cast<size_t>(cookie) - 1;
+    const size_t which = ((size_t)cookie)-1;
 
     AutoMutex _l(mLock);
 
     LOG_FATAL_IF(mAssetPaths.size() == 0, "No assets added to AssetManager");
+
 
     if (mCacheMode != CACHE_OFF && !mCacheValid)
         loadFileNameCacheLocked();
@@ -1543,7 +1544,7 @@ AssetDir* AssetManager::openDir(const char* dirName)
  *
  * Pass in "" for the root dir.
  */
-AssetDir* AssetManager::openNonAssetDir(const int32_t cookie, const char* dirName)
+AssetDir* AssetManager::openNonAssetDir(void* cookie, const char* dirName)
 {
     AutoMutex _l(mLock);
 
@@ -1562,7 +1563,7 @@ AssetDir* AssetManager::openNonAssetDir(const int32_t cookie, const char* dirNam
 
     pMergedInfo = new SortedVector<AssetDir::FileInfo>;
 
-    const size_t which = static_cast<size_t>(cookie) - 1;
+    const size_t which = ((size_t)cookie)-1;
 
     if (which < mAssetPaths.size()) {
         const asset_path& ap = mAssetPaths.itemAt(which);
