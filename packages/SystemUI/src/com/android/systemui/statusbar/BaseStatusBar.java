@@ -206,8 +206,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected ImageView mHaloButton;
     protected boolean mHaloButtonVisible = true;
 
-    protected FrameLayout mStatusBarContainer;
-
     // UI-specific methods
 
     /**

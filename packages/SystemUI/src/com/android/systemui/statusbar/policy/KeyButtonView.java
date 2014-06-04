@@ -59,11 +59,8 @@ public class KeyButtonView extends ImageView {
     String mLongpressAction;
     int mTouchSlop;
     Drawable mGlowBG;
-<<<<<<< HEAD
     int mGlowBGColor;
-=======
     int mGlowBgId;
->>>>>>> 0abefca... Theme Engine [3/8]
     int mGlowWidth, mGlowHeight;
     float mGlowAlpha = 0f, mGlowScale = 1f;
     @ViewDebug.ExportedProperty(category = "drawing")

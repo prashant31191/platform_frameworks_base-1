@@ -29,6 +29,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -360,19 +361,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         return mCurrentView.findViewById(R.id.camera_button);
     }
 
-    private void getIcons(Resources res) {
-        mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
-        mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
-        mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
-        mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
-        mRecentIcon = res.getDrawable(R.drawable.ic_sysbar_recent);
-        mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
-        mRecentAltIcon = res.getDrawable(R.drawable.ic_sysbar_recent_clear);
-        mRecentAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_clear_land);
-    }
-
     public void updateResources() {
-        getIcons(mContext.getResources());
         for (int i = 0; i < mRotatedViews.length; i++) {
             ViewGroup container = (ViewGroup) mRotatedViews[i];
             if (container != null) {

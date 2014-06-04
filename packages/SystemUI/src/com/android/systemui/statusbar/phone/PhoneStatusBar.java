@@ -163,6 +163,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public static final String ACTION_STATUSBAR_START
             = "com.android.internal.policy.statusbar.START";
+            
+      // last theme that was applied in order to detect theme change (as opposed
+    // to some other configuration change).
+    CustomTheme mCurrentTheme;
 
     public static final String CUSTOM_LOCKSCREEN_STATE
             = "com.android.keyguard.custom.STATE";
