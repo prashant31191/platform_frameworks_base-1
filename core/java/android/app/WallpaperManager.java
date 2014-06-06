@@ -46,9 +46,8 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.util.DisplayMetrics;
+import android.os.SystemProperties;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 
 import java.io.BufferedInputStream;
@@ -325,9 +324,8 @@ public class WallpaperManager {
 
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        Bitmap bm = BitmapFactory.decodeFileDescriptor(
+                        return BitmapFactory.decodeFileDescriptor(
                                 fd.getFileDescriptor(), null, options);
-                        return generateBitmap(context, bm, width, height);
                     } catch (OutOfMemoryError e) {
                         Log.w(TAG, "Can't decode file", e);
                     } finally {
@@ -380,8 +378,7 @@ public class WallpaperManager {
 
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        Bitmap bm = BitmapFactory.decodeStream(is, null, options);
-                        return generateBitmap(context, bm, width, height);
+                        return BitmapFactory.decodeStream(is, null, options);
                     } catch (OutOfMemoryError e) {
                         Log.w(TAG, "Can't decode stream", e);
                     } finally {
@@ -704,7 +701,7 @@ public class WallpaperManager {
         return sGlobals.peekWallpaperBitmap(mContext, true);
     }
 
-    /**
+     /**
      * @hide
      */
     public Bitmap getKeyguardBitmap() {
@@ -753,6 +750,10 @@ public class WallpaperManager {
      *         not "image/*"
      */
     public Intent getCropAndSetWallpaperIntent(Uri imageUri) {
+        if (imageUri == null) {
+            throw new IllegalArgumentException("Image URI must not be null");
+        }
+
         if (!ContentResolver.SCHEME_CONTENT.equals(imageUri.getScheme())) {
             throw new IllegalArgumentException("Image URI must be of the "
                     + ContentResolver.SCHEME_CONTENT + " scheme type");
@@ -867,7 +868,7 @@ public class WallpaperManager {
         }
     }
 
-    /**
+     /**
      * @param bitmap
      * @throws IOException
      * @hide
@@ -1065,6 +1066,35 @@ public class WallpaperManager {
      */
     public void suggestDesiredDimensions(int minimumWidth, int minimumHeight) {
         try {
+            /**
+             * The framework makes no attempt to limit the window size
+             * to the maximum texture size. Any window larger than this
+             * cannot be composited.
+             *
+             * Read maximum texture size from system property and scale down
+             * minimumWidth and minimumHeight accordingly.
+             */
+            int maximumTextureSize;
+            try {
+                maximumTextureSize = SystemProperties.getInt("sys.max_texture_size", 0);
+            } catch (Exception e) {
+                maximumTextureSize = 0;
+            }
+
+            if (maximumTextureSize > 0) {
+                if ((minimumWidth > maximumTextureSize) ||
+                    (minimumHeight > maximumTextureSize)) {
+                    float aspect = (float)minimumHeight / (float)minimumWidth;
+                    if (minimumWidth > minimumHeight) {
+                        minimumWidth = maximumTextureSize;
+                        minimumHeight = (int)((minimumWidth * aspect) + 0.5);
+                    } else {
+                        minimumHeight = maximumTextureSize;
+                        minimumWidth = (int)((minimumHeight / aspect) + 0.5);
+                    }
+                }
+            }
+
             if (sGlobals.mService == null) {
                 Log.w(TAG, "WallpaperService not running");
             } else {
@@ -1233,63 +1263,5 @@ public class WallpaperManager {
      */
     public void clearKeyguardWallpaper() {
         sGlobals.clearKeyguardWallpaper();
-    }
-    
-    static Bitmap generateBitmap(Context context, Bitmap bm, int width, int height) {
-        if (bm == null) {
-            return null;
-        }
-
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(metrics);
-        bm.setDensity(metrics.noncompatDensityDpi);
-
-        if (width <= 0 || height <= 0
-                || (bm.getWidth() == width && bm.getHeight() == height)) {
-            return bm;
-        }
-
-        // This is the final bitmap we want to return.
-        try {
-            Bitmap newbm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            newbm.setDensity(metrics.noncompatDensityDpi);
-
-            Canvas c = new Canvas(newbm);
-            Rect targetRect = new Rect();
-            targetRect.right = bm.getWidth();
-            targetRect.bottom = bm.getHeight();
-
-            int deltaw = width - targetRect.right;
-            int deltah = height - targetRect.bottom;
-
-            if (deltaw > 0 || deltah > 0) {
-                // We need to scale up so it covers the entire area.
-                float scale;
-                if (deltaw > deltah) {
-                    scale = width / (float)targetRect.right;
-                } else {
-                    scale = height / (float)targetRect.bottom;
-                }
-                targetRect.right = (int)(targetRect.right*scale);
-                targetRect.bottom = (int)(targetRect.bottom*scale);
-                deltaw = width - targetRect.right;
-                deltah = height - targetRect.bottom;
-            }
-
-            targetRect.offset(deltaw/2, deltah/2);
-
-            Paint paint = new Paint();
-            paint.setFilterBitmap(true);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-            c.drawBitmap(bm, null, targetRect, paint);
-
-            bm.recycle();
-            c.setBitmap(null);
-            return newbm;
-        } catch (OutOfMemoryError e) {
-            Log.w(TAG, "Can't generate default bitmap", e);
-            return bm;
-        }
     }
 }
