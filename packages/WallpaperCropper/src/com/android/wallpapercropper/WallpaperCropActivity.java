@@ -125,7 +125,6 @@ public class WallpaperCropActivity extends Activity {
         int rotation = getRotationFromExif(this, imageUri);
         mCropView.setTileSource(new BitmapRegionTileSource(this, imageUri, 1024, rotation), null);
         mCropView.setTouchEnabled(true);
-
         // Action bar
         // Show the custom action bar view
         final ActionBar actionBar = getActionBar();
@@ -138,7 +137,6 @@ public class WallpaperCropActivity extends Activity {
                         cropImageAndSetWallpaper(imageUri, null, finishActivityWhenDone);
                     }
                 });
-        mSetWallpaperButton = findViewById(R.id.set_wallpaper_button);
     }
 
     public boolean enableRotation() {
@@ -339,12 +337,6 @@ public class WallpaperCropActivity extends Activity {
 
         Point inSize = mCropView.getSourceDimensions();
 
-        // Due to rounding errors in the cropview renderer the edges can be slightly offset
-        // therefore we ensure that the boundaries are sanely defined
-        cropRect.left = Math.max(0, cropRect.left);
-        cropRect.right = Math.min(inSize.x, cropRect.right);
-        cropRect.top = Math.max(0, cropRect.top);
-        cropRect.bottom = Math.min(inSize.y, cropRect.bottom);
         int cropRotation = mCropView.getImageRotation();
         float cropScale = mCropView.getWidth() / (float) cropRect.width();
 
@@ -354,6 +346,13 @@ public class WallpaperCropActivity extends Activity {
         rotateMatrix.mapPoints(rotatedInSize);
         rotatedInSize[0] = Math.abs(rotatedInSize[0]);
         rotatedInSize[1] = Math.abs(rotatedInSize[1]);
+
+        // Due to rounding errors in the cropview renderer the edges can be slightly offset
+        // therefore we ensure that the boundaries are sanely defined
+        cropRect.left = Math.max(0, cropRect.left);
+        cropRect.right = Math.min(rotatedInSize[0], cropRect.right);
+        cropRect.top = Math.max(0, cropRect.top);
+        cropRect.bottom = Math.min(rotatedInSize[1], cropRect.bottom);
 
         // ADJUST CROP WIDTH
         // Extend the crop all the way to the right, for parallax
@@ -422,6 +421,7 @@ public class WallpaperCropActivity extends Activity {
         byte[] mInImageBytes;
         int mInResId = 0;
         InputStream mInStream;
+        RectF mCropBounds = null;
         int mOutWidth, mOutHeight;
         int mRotation;
         String mOutputFormat = "jpg"; // for now
@@ -578,8 +578,8 @@ public class WallpaperCropActivity extends Activity {
                     mCropBounds.offset(-rotatedBounds[0]/2, -rotatedBounds[1]/2);
                     inverseRotateMatrix.mapRect(mCropBounds);
                     mCropBounds.offset(bounds.x/2, bounds.y/2);
-                    regenerateInputStream();
 
+                    regenerateInputStream();
                 }
 
                 mCropBounds.roundOut(roundedTrueCrop);
@@ -593,6 +593,7 @@ public class WallpaperCropActivity extends Activity {
                 // See how much we're reducing the size of the image
                 int scaleDownSampleSize = Math.min(roundedTrueCrop.width() / mOutWidth,
                         roundedTrueCrop.height() / mOutHeight);
+
                 // Attempt to open a region decoder
                 BitmapRegionDecoder decoder = null;
                 try {

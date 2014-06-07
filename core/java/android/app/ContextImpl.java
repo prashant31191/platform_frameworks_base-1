@@ -1647,8 +1647,7 @@ class ContextImpl extends Context {
                 arguments.setAllowFds(false);
             }
             return ActivityManagerNative.getDefault().startInstrumentation(
-                    className, profileFile, 0, arguments, null, null, getUserId(),
-                    null /* ABI override */);
+                    className, profileFile, 0, arguments, null, null, getUserId());
         } catch (RemoteException e) {
             // System has crashed, nothing we can do.
         }
@@ -2054,10 +2053,11 @@ class ContextImpl extends Context {
                     || displayId != Display.DEFAULT_DISPLAY
                     || overrideConfiguration != null
                     || (compatInfo != null && compatInfo.applicationScale
-                            != resources.getCompatibilityInfo().applicationScale)) {
+                    != resources.getCompatibilityInfo().applicationScale)) {
                 resources = mResourcesManager.getTopLevelResources(
                         packageInfo.getResDir(), packageInfo.getOverlayDirs(), displayId,
-                        overrideConfiguration, compatInfo, activityToken);
+                        packageInfo.getAppDir(), overrideConfiguration,
+                        compatInfo, activityToken, this);
             }
         }
         mResources = resources;

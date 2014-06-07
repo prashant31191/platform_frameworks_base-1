@@ -2112,16 +2112,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         mInLayout = true;
+        final int childCount = getChildCount();
         if (changed) {
-            int childCount = getChildCount();
             for (int i = 0; i < childCount; i++) {
                 getChildAt(i).forceLayout();
             }
             mRecycler.markChildrenDirty();
-        }
-
-        if (mFastScroller != null && (mItemCount != mOldItemCount || mDataChanged)) {
-            mFastScroller.onItemCountChanged(mItemCount);
         }
 
         mOverScrollMode = getOverScrollMode();
@@ -2138,6 +2134,11 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
         mHeight = getHeight();
         mWidth = getWidth();
+
+        // TODO: Move somewhere sane. This doesn't belong in onLayout().
+        if (mFastScroller != null) {
+            mFastScroller.onItemCountChanged(getChildCount(), mItemCount);
+        }
     }
 
     /**
@@ -2291,28 +2292,36 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         isScrap[0] = false;
 
-            if (mListAnimationMode != 0 && !mIsWidget) {
-                child = setAnimation(child);
-            }
-
         // Check whether we have a transient state view. Attempt to re-bind the
         // data and discard the view if we fail.
         final View transientView = mRecycler.getTransientStateView(position);
         if (transientView != null) {
-            final View updatedView = mAdapter.getView(position, transientView, this);
-            if (updatedView != transientView) {
-                // Failed to re-bind the data, scrap the obtained view.
-                mRecycler.addScrapView(updatedView, position);
+            final LayoutParams params = (LayoutParams) transientView.getLayoutParams();
+
+            // If the view type hasn't changed, attempt to re-bind the data.
+            if (params.viewType == mAdapter.getItemViewType(position)) {
+                final View updatedView = mAdapter.getView(position, transientView, this);
+
+                // If we failed to re-bind the data, scrap the obtained view.
+                if (updatedView != transientView) {
+                    mRecycler.addScrapView(updatedView, position);
+                }
             }
 
             // Scrap view implies temporary detachment.
             isScrap[0] = true;
             return transientView;
+
         }
 
         final View scrapView = mRecycler.getScrapView(position);
-        final View child = mAdapter.getView(position, scrapView, this);
+        View child = mAdapter.getView(position, scrapView, this);
+
         if (scrapView != null) {
+            if (mListAnimationMode != 0 && !mIsWidget) {
+                child = setAnimation(child);
+            }
+
             if (child != scrapView) {
                 // Failed to re-bind the data, return scrap to the heap.
                 mRecycler.addScrapView(scrapView, position);
