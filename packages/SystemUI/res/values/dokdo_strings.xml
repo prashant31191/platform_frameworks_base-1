@@ -230,5 +230,10 @@ wn on the screen). [CHAR LIMIT=NONE] -->
 
     <!-- Smart PullDown Warning -->
     <string name="smart_pulldown_disabled">Smart pulldown is disabled</string>
+    
+    <!-- Recent Apps -->
+    <string name="recent_title_txt">Recent Apps</string>
+    <string name="free_ram"><xliff:g id="memory">%1$s</xliff:g></string>
+    <string name="total_ram"><xliff:g id="memory">%1$s</xliff:g></string>
 
 </resources>

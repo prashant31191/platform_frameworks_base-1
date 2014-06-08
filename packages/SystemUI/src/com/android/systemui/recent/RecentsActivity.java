@@ -61,7 +61,7 @@ public class RecentsActivity extends Activity {
                 }
             } else if (WINDOW_ANIMATION_START_INTENT.equals(intent.getAction())) {
                 if (mRecentsPanel != null) {
-                    mRecentsPanel.onWindowAnimationStart();
+                   // mRecentsPanel.onWindowAnimationStart();
                 }
             }
         }

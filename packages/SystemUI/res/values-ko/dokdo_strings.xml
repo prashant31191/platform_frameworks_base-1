@@ -73,4 +73,7 @@
     <string name="weather_45">천둥을 동반한 강한비</string>
     <string name="weather_46">비와 눈</string>
     <string name="weather_47">한때 한때 천둥을 동반한 강한 비</string>
+    
+    <!-- Recent Apps -->
+    <string name="recent_title_txt">최근 실행한 앱</string>
 </resources>

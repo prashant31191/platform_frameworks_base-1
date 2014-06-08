@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="top"
+    android:orientation="horizontal"
+    android:src="#00000000" >
+
+	<TextView
+	    android:id="@+id/recent_title"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginLeft="16dp"
+	    android:layout_marginTop="28dip"
+	    android:layout_weight="1"
+	    android:shadowColor="#40000000"
+	    android:shadowDx="0"
+	    android:shadowDy="2"
+	    android:shadowRadius="5"
+	    android:text="@string/recent_title_txt"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textColor="#ffffffff" />
+
+	<TextView
+	    android:id="@+id/free_ram"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginTop="28dip"
+	    android:layout_toLeftOf="@+id/total_ram"
+	    android:text="@string/free_ram" />
+
+	<TextView
+	    android:id="@+id/total_ram"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginTop="28dip"
+	    android:layout_toLeftOf="@+id/recents_clear"
+	    android:text="@string/total_ram" />
+
+	<ImageView
+	    android:id="@+id/recents_clear"
+	    android:layout_width="50dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:clickable="true"
+	    android:src="@drawable/ic_recents_clear"
+	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>
