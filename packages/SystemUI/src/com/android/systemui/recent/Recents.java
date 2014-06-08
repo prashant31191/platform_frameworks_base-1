@@ -217,19 +217,9 @@ public class Recents extends SystemUI implements RecentsComponent {
                     }
                 }
 
-                ActivityOptions opts = ActivityOptions.makeThumbnailScaleDownAnimation(
-                        statusBarView,
-                        first, x, y,
-                        new ActivityOptions.OnAnimationStartedListener() {
-                            public void onAnimationStarted() {
-                                Intent intent =
-                                        new Intent(RecentsActivity.WINDOW_ANIMATION_START_INTENT);
-                                intent.setPackage("com.android.systemui");
-                                mContext.sendBroadcastAsUser(intent,
-                                        new UserHandle(UserHandle.USER_CURRENT));
-                            }
-                        });
-                intent.putExtra(RecentsActivity.WAITING_FOR_WINDOW_ANIMATION_PARAM, true);
+                ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                        R.anim.recents_launch_from_launcher_enter,
+                        R.anim.recents_launch_from_launcher_exit);
                 mContext.startActivityAsUser(intent, opts.toBundle(), new UserHandle(
                         UserHandle.USER_CURRENT));
             }

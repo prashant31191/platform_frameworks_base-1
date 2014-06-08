@@ -193,7 +193,7 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
                 public void run() {
                     dismissChild(child);
                 }
-            }, delayCounter * 150);
+            }, delayCounter * 0);
         }
     }
 

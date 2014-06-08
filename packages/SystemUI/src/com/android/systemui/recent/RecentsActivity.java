@@ -200,7 +200,7 @@ public class RecentsActivity extends Activity {
         }
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(CLOSE_RECENTS_INTENT);
-        mIntentFilter.addAction(WINDOW_ANIMATION_START_INTENT);
+        // mIntentFilter.addAction(WINDOW_ANIMATION_START_INTENT);
         registerReceiver(mIntentReceiver, mIntentFilter);
         super.onCreate(savedInstanceState);
     }

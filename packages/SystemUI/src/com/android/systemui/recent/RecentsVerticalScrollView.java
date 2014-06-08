@@ -200,7 +200,7 @@ public class RecentsVerticalScrollView extends ScrollView
                 public void run() {
                     dismissChild(child);
                 }
-            }, delayCounter * 150);
+            }, delayCounter * 0);
         }
     }
 
