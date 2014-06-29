@@ -4090,6 +4090,12 @@ public final class Settings {
         public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
 
         /**
+	 * LockScreen Blur Radius
+   	 * @hide
+ 	 */
+	public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
+
+        /**
          * Whether to allow killing of the foreground app by long-pressing the Back button
          * @hide
          */
