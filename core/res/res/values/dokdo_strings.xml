@@ -119,4 +119,6 @@
     <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
        modify which theme you have applied.</string>
 
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">Application killed</string>
 </resources>
